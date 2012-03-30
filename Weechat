@@ -1,0 +1,11 @@
+#! /usr/local/bin/zsh
+
+tmux has-session -t Weechat &> /dev/null
+
+if [ $? -eq 0 ]; then # Weechat is already running in tmux.
+    tmux attach-session -t Weechat
+else
+    tmux new-session -d -s Weechat
+    tmux new-window -t Weechat:0 weechat-curses
+    tmux attach-session -t Weechat
+fi
