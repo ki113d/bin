@@ -1,0 +1,38 @@
+#! /usr/bin/python2
+
+import subprocess
+import sys
+
+Bin = "/usr/bin/ncmpcpp"
+
+info = { "title":  subprocess.check_output([Bin, "--now-playing", "%t"], shell=False),
+         "file":   subprocess.check_output([Bin, "--now-playing", "%f"], shell=False),
+         "artist": subprocess.check_output([Bin, "--now-playing", "%a"], shell=False),
+         "album":  subprocess.check_output([Bin, "--now-playing", "%b"], shell=False),
+         "length": subprocess.check_output([Bin, "--now-playing", "%l"], shell=False)}
+
+for key in info:
+    info[key] = info[key].strip()
+    if info[key] == "\n":
+        if key == "title":
+            info[key] = info["file"]
+
+# Quick and messy hack lol
+string = "|".join([(lambda x: ':'.join([x, info[x].strip()]))(key) for key in info.keys()])
+command = ["/usr/lib/lastfmsubmitd/lastfmsubmit",
+           "--artist", "{0}".format(info['artist']),
+           "--title", "{0}".format(info['title']),
+           "--length", "{0}".format(info['length']),
+           "--album", "{0}".format(info['album'])]
+
+with open("/home/ki113d/.ncmpcpp/np", 'r') as f:
+    fString = f.read().strip()
+    if fString != string:
+        s = subprocess.check_output(command)
+    else:
+        sys.exit(0)
+
+with open("/home/ki113d/.ncmpcpp/np", "w") as f:
+    f.write(string)
+
+# vim: set ts=4 sw=4 tw=120 ff=unix :

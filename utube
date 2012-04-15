@@ -1,0 +1,5 @@
+#! /bin/zsh
+
+mplayer -fs -msgcolor -cookies -cookies-file /tmp/cookie.txt $(youtube-dl -g --cookies /tmp/cookie.txt "$1")
+
+#  vim: set ts=4 sw=4 tw=120 ff=unix :

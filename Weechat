@@ -1,4 +1,4 @@
-#! /usr/local/bin/zsh
+#! /bin/zsh
 
 tmux has-session -t Weechat &> /dev/null
 
@@ -9,3 +9,5 @@ else
     tmux new-window -t Weechat:0 weechat-curses
     tmux attach-session -t Weechat
 fi
+
+#  vim: set ts=4 sw=4 tw=120 ff=unix :
